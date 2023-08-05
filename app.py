@@ -41,8 +41,9 @@ st.set_page_config(page_title='RealizeAI', layout='wide', page_icon = im)
 
 
 # Side bar
-st.sidebar.markdown(":blue[RealizeAI]")
-st.sidebar.markdown("*Think your unique knowledge has no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks. Harness AI to unlock and monetize your insights. Know more, achieve more.*")
+st.sidebar.title(":blue[RealizeAI]")
+st.sidebar.markdown("Think your unique knowledge has no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks.")
+st.sidebar.markdown("*Harness AI to unlock and monetize your insights. Know more, achieve more.*")
 
 
 # Store the initial value of widgets in session state
@@ -58,7 +59,7 @@ st.subheader(':blue[Ever wondered how your knowledge can be used in the real wor
 
 #columns for layout
 col1, col2 = st.columns(2)
-col2.markdown(":blue[AI:]")
+col2.markdown(":blue[AI Response:]")
 
 
 # Enable to save to disk & reuse the model (for repeated queries on the same data)
@@ -204,10 +205,5 @@ if script:
 
 
 
-# hide streamlit
-
-hide_footer_style = """
-<style>
-.reportview-container .main footer {visibility: hidden;}    
-"""
-st.markdown(hide_footer_style, unsafe_allow_html=True)
+# Hide Streamlit's default footer
+st.markdown('<style>footer{visibility:hidden;}</style>', unsafe_allow_html=True)
