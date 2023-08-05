@@ -41,7 +41,14 @@ st.set_page_config(page_title='RealizeAI', layout='wide', page_icon = im)
 
 
 # Side bar
-st.sidebar.markdown(":blue[Enter description and instructions here]")
+st.sidebar.markdown(":blue[RealizeAI]")
+st.sidebar.markdown("*Think your unique knowledge has no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks. Harness AI to unlock and monetize your insights. Know more, achieve more.*")
+
+
+# Store the initial value of widgets in session state
+if "visibility" not in st.session_state:
+    st.session_state.visibility = "visible"
+    st.session_state.disabled = False
 
 
 # APP LAYOUT
@@ -51,7 +58,7 @@ st.subheader(':blue[Ever wondered how your knowledge can be used in the real wor
 
 #columns for layout
 col1, col2 = st.columns(2)
-
+col2.markdown(":blue[AI:]")
 
 
 # Enable to save to disk & reuse the model (for repeated queries on the same data)
@@ -157,11 +164,15 @@ def generate_questions_response(input_text):
 #LAYOUT FOR COLUMN 1
 with col1:
     chain = load_model()
-    script = st.text_input("Your knowledge you'd like to see transformed into action:", 'virtual reality')
+
+    placeholder_text_prompt = "whistling"
+    script = st.text_input("Your knowledge you'd like to see transformed into action:",value="", help="", key="prompt_input", placeholder=placeholder_text_prompt)
+    
     fileSaver()
 
     with st.form('additional_questions_form'):
-        query = st.text_area('Enter additional questions and/or notes:', 'In what industries do you envision the most transformative impact?')    
+        placeholder_text_additional = "In what industries do you envision the most transformative impact?"
+        query = st.text_area('Enter additional questions and/or notes:',value="", help="", key="additional_input", placeholder=placeholder_text_additional)    
         submitted = st.form_submit_button(label='Submit')
         if submitted:
             with col2:
