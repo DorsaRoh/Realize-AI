@@ -1,4 +1,7 @@
-# 🧠 Custom-AI
+# 🧠 Realize AI
+
+
+
 
 ### AI trained on **custom** user data.
 
