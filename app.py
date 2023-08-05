@@ -32,8 +32,13 @@ from key import APIKEY #import api key from key.py
 os.environ['OPENAI_API_KEY'] = APIKEY
 
 
-# Set Streamlit page configuration
-st.set_page_config(page_title='RealizeAI', layout='wide')
+# Set Streamlit page configuration & LOGO
+from PIL import Image
+# Loading Image using PIL
+im = Image.open('content/logo.png')
+# Adding Image to web app
+st.set_page_config(page_title='RealizeAI', layout='wide', page_icon = im)
+
 
 # Side bar
 st.sidebar.markdown(":blue[Enter description and instructions here]")
@@ -186,3 +191,12 @@ if script:
     except TypeError as e:
         st.write("An error occurred: ", e)
 
+
+
+# hide streamlit
+
+hide_footer_style = """
+<style>
+.reportview-container .main footer {visibility: hidden;}    
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
