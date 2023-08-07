@@ -29,7 +29,7 @@ from langchain.utilities import WikipediaAPIWrapper
 from pdfreader import PDFDocument, SimplePDFViewer
 
 from key import APIKEY #import api key from key.py
-os.environ['OPENAI_API_KEY'] = APIKEY
+
 
 
 # Set Streamlit page configuration & LOGO
@@ -41,6 +41,12 @@ st.set_page_config(page_title='Realize-AI', layout='wide', page_icon = im)
 
 
 # Side bar
+# Side bar api key
+openai_api_key = st.sidebar.text_input('OpenAI API Key')
+st.sidebar.markdown("*Please enter your OpenAI API key*")
+os.environ['OPENAI_API_KEY'] = openai_api_key  
+st.write("#")
+
 st.sidebar.title(":blue[Realize-AI]")
 st.sidebar.markdown("Think your unique skills have no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks.")
 st.sidebar.markdown("*Harness AI to unlock and monetize your insights. Know more, achieve more.*")
@@ -66,9 +72,17 @@ st.markdown("___")
 col1, col2 = st.columns(2)
 col2.markdown(":blue[AI Response:]")
 
-
+ #If invalid/no api key enteblue, show warning
+def valid_apikey():
+    if openai_api_key.startswith('sk-'):
+        return True
+    else:
+        st.warning('Invalid API Key', icon='⚠')
+        return False
+    
 # Enable to save to disk & reuse the model (for repeated queries on the same data)
 PERSIST = False
+
 
 # Langchain LLM that feeds off of user data
 def load_model():
@@ -98,29 +112,29 @@ chat_history = []
 # FILE SAVE TO DATA FOLDER
 
 # Extract text from user uploaded pdf file - so LLM can read it
-def extract_text_from_pdf(file_path):
-    with open(file_path, 'rb') as fd:
-        viewer = SimplePDFViewer(fd)
-        text = ""
-        for page in viewer:
-            viewer.render()
-            text += ' '.join(viewer.canvas.strings)
-    return text
+#def extract_text_from_pdf(file_path):
+#    with open(file_path, 'rb') as fd:
+ #       viewer = SimplePDFViewer(fd)
+  #      text = ""
+   #     for page in viewer:
+    #        viewer.render()
+     #       text += ' '.join(viewer.canvas.strings)
+   # return text
 
-def fileSaver():
-    #st.title("File Uploader and Saver")
-    uploaded_file = st.file_uploader("Is there specific info you wish the AI to know?", type='.pdf')
-
-    if uploaded_file is not None:
-        with open(os.path.join("data", uploaded_file.name), "wb") as f:
-            f.write(uploaded_file.getbuffer())
-        st.success("File has been saved successfully!")
-
+#def fileSaver():
+ #   #st.title("File Uploader and Saver")
+  #  uploaded_file = st.file_uploader("Is there specific info you wish the AI to know?", type='.pdf')
+#
+ #   if uploaded_file is not None and valid_apikey():
+  #      with open(os.path.join("data", uploaded_file.name), "wb") as f:
+   #         f.write(uploaded_file.getbuffer())
+    #    st.success("File has been saved successfully!")
+#
         # create a text file with the pdf's text content
-        file_path = os.path.join("data", uploaded_file.name)
-        text_content = extract_text_from_pdf(file_path)
-        with open(os.path.splitext(file_path)[0]+".txt", "w") as f: 
-            f.write(text_content)
+ #       file_path = os.path.join("data", uploaded_file.name)
+  #      text_content = extract_text_from_pdf(file_path)
+   #     with open(os.path.splitext(file_path)[0]+".txt", "w") as f: 
+    #        f.write(text_content)
 
 
 
@@ -174,21 +188,21 @@ with col1:
     placeholder_text_prompt = "classical guitar playing"
     script = st.text_input("Knowledge you'd like to see transformed into action:",value="", help="", key="prompt_input", placeholder=placeholder_text_prompt)
     
-    fileSaver()
+    #fileSaver()
 
     with st.form('additional_questions_form'):
         placeholder_text_additional = "In what industries do you envision the most transformative impact?"
         query = st.text_area('Enter additional questions:',value="", help="", key="additional_input", placeholder=placeholder_text_additional)    
         submitted = st.form_submit_button(label='Submit')
-        if submitted:
-            with col2:
-                generate_questions_response(query)
+        valid_apikey()
+        if submitted and valid_apikey():
+            generate_questions_response(query)
     
 
 wiki = WikipediaAPIWrapper()
 
 
-if script:
+if script and valid_apikey():
     try:
         title_prompt = title_template.format(topic=script)
         title_result = chain({"question": title_prompt, "chat_history": chat_history})
