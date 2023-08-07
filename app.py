@@ -37,14 +37,18 @@ from PIL import Image
 # Loading Image using PIL
 im = Image.open('content/logo.png')
 # Adding Image to web app
-st.set_page_config(page_title='RealizeAI', layout='wide', page_icon = im)
+st.set_page_config(page_title='Realize-AI', layout='wide', page_icon = im)
 
 
 # Side bar
-st.sidebar.title(":blue[RealizeAI]")
-st.sidebar.markdown("Think your unique knowledge has no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks.")
+st.sidebar.title(":blue[Realize-AI]")
+st.sidebar.markdown("Think your unique skills have no real-world value? With Realize-AI, turn even the most obscure ideas into actionable tasks.")
 st.sidebar.markdown("*Harness AI to unlock and monetize your insights. Know more, achieve more.*")
+st.sidebar.markdown("___")
 
+st.sidebar.markdown("[**Github**](https://github.com/DorsaRoh/Custom-AI)   [**Twitter**](https://twitter.com/Dorsa_Rohani) [**Linkedin**](https://www.linkedin.com/in/dorsarohani/)")
+st.sidebar.markdown("#")
+st.sidebar.markdown("#")
 
 # Store the initial value of widgets in session state
 if "visibility" not in st.session_state:
@@ -54,8 +58,9 @@ if "visibility" not in st.session_state:
 
 # APP LAYOUT
 # Title
-st.title('RealizeAI.')
+st.title('Realize-AI')
 st.subheader(':blue[Ever wondered how your knowledge can be used in the real world?]')
+st.markdown("___")
 
 #columns for layout
 col1, col2 = st.columns(2)
@@ -104,7 +109,7 @@ def extract_text_from_pdf(file_path):
 
 def fileSaver():
     #st.title("File Uploader and Saver")
-    uploaded_file = st.file_uploader("Is there specific info you wish the AI to know/consider?", type='.pdf')
+    uploaded_file = st.file_uploader("Is there specific info you wish the AI to know?", type='.pdf')
 
     if uploaded_file is not None:
         with open(os.path.join("data", uploaded_file.name), "wb") as f:
@@ -166,14 +171,14 @@ def generate_questions_response(input_text):
 with col1:
     chain = load_model()
 
-    placeholder_text_prompt = "whistling"
-    script = st.text_input("Your knowledge you'd like to see transformed into action:",value="", help="", key="prompt_input", placeholder=placeholder_text_prompt)
+    placeholder_text_prompt = "classical guitar playing"
+    script = st.text_input("Knowledge you'd like to see transformed into action:",value="", help="", key="prompt_input", placeholder=placeholder_text_prompt)
     
     fileSaver()
 
     with st.form('additional_questions_form'):
         placeholder_text_additional = "In what industries do you envision the most transformative impact?"
-        query = st.text_area('Enter additional questions and/or notes:',value="", help="", key="additional_input", placeholder=placeholder_text_additional)    
+        query = st.text_area('Enter additional questions:',value="", help="", key="additional_input", placeholder=placeholder_text_additional)    
         submitted = st.form_submit_button(label='Submit')
         if submitted:
             with col2:

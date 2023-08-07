@@ -1,2 +1,2 @@
 # My api key
-APIKEY = "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"
+APIKEY = "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"
